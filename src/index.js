@@ -72,6 +72,8 @@ function addGUI() {
     spikesFolder.add(spikes, 'size', 10, 150);
     spikesFolder.add(spikes, 'opacity', 0, 1);
     spikesFolder.addColor(spikes, 'color');
+
+    gui.close();
 }
 
 function createAudioContext() {
