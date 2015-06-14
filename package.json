@@ -35,6 +35,6 @@
   "license": "All rights reserved",
   "dependencies": {
     "babelify": "^6.0.1",
-    "famous": "^1.0.0"
+    "famous": "^0.5.2"
   }
 }
