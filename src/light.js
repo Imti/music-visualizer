@@ -1,3 +1,5 @@
+'use strict';
+
 var PointLight = require('famous/webgl-renderables/lights/PointLight');
 var Vec3 = require('famous/math/Vec3');
 
@@ -8,7 +10,7 @@ function Light(node, color) {
     this.tempo = Math.random() * 10;
     this.radius = 1000;
 
-    var pointLight = new PointLight(this.node)
+    new PointLight(this.node)
         .setColor(color);
 
     this.pos = new Vec3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
@@ -33,6 +35,6 @@ Light.prototype.onUpdate = function onUpdate(time) {
     this.node
         .setPosition(p.x, p.y, 1000)
         .requestUpdateOnNextTick(this.id);
-}
+};
 
 module.exports = Light;

@@ -1,3 +1,5 @@
+'use strict';
+
 var Mesh = require('famous/webgl-renderables/Mesh');
 var DynamicGeometry = require('famous/webgl-geometries/DynamicGeometry');
 var GeodesicSphere = require('famous/webgl-geometries/primitives/GeodesicSphere');
@@ -6,6 +8,11 @@ var Color = require('famous/utilities/Color');
 
 function MiddleSphere(node, analyzer, frequencyData) {
     this.id = node.addComponent(this);
+
+    // gui settings
+    this.opacity = 1.0;
+    this.color = '#fff';
+    this.size = 75;
 
     this.node = node;
     this.analyzer = analyzer;
@@ -33,15 +40,17 @@ function MiddleSphere(node, analyzer, frequencyData) {
     this.mesh = new Mesh(this.node)
         .setGeometry(this.geometry)
         .setPositionOffset(this.offset)
-        .setBaseColor(new Color('white'))
+        .setBaseColor(new Color(this.color))
+        .setGlossiness(new Color(this.color));
 
     this.node
         .setSizeMode(1, 1, 1)
-        .setAbsoluteSize(75, 75, 75)
+        .setAbsoluteSize(this.size, this.size, this.size)
         .setAlign(0.5, 0.5, 0.5)
         .setOrigin(0.5, 0.5, 0.5)
         .setMountPoint(0.5, 0.5, 0.5)
-        .requestUpdate(this.id)
+        .setOpacity(this.opacity)
+        .requestUpdate(this.id);
 }
 
 MiddleSphere.prototype.onUpdate = function onUpdate(time) {
@@ -62,6 +71,13 @@ MiddleSphere.prototype.onUpdate = function onUpdate(time) {
     this.node
         .setRotation(offset, offset, offset)
         .requestUpdateOnNextTick(this.id);
-}
+
+    // gui update
+    this.node
+        .setAbsoluteSize(this.size, this.size, this.size)
+        .setOpacity(this.opacity);
+
+    this.mesh.setBaseColor(new Color(this.color));
+};
 
 module.exports = MiddleSphere;

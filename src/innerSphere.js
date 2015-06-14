@@ -1,3 +1,5 @@
+'use strict';
+
 var Mesh = require('famous/webgl-renderables/Mesh');
 var DynamicGeometry = require('famous/webgl-geometries/DynamicGeometry');
 var Sphere = require('famous/webgl-geometries/primitives/Sphere');
@@ -6,6 +8,11 @@ var Color = require('famous/utilities/Color');
 
 function InnerSphere(node, analyzer, frequencyData) {
     this.id = node.addComponent(this);
+
+    // gui settings
+    this.opacity = 1.0;
+    this.color = '#999';
+    this.size = 50;
 
     this.node = node;
     this.analyzer = analyzer;
@@ -29,20 +36,19 @@ function InnerSphere(node, analyzer, frequencyData) {
         uniforms: { u_innerSphereAmplitude: 1 }
     });
 
-
     this.mesh = new Mesh(this.node)
         .setGeometry(this.geometry)
         .setPositionOffset(this.offset)
-        .setBaseColor(new Color('#999'))
+        .setBaseColor(new Color(this.color));
 
     this.node
         .setSizeMode(1, 1, 1)
-        .setAbsoluteSize(50, 50, 50)
+        .setAbsoluteSize(this.size, this.size, this.size)
         .setAlign(0.5, 0.5, 0.5)
         .setOrigin(0.5, 0.5, 0.5)
         .setMountPoint(0.5, 0.5, 0.5)
-        .requestUpdate(this.id)
-
+        .setOpacity(this.opacity)
+        .requestUpdate(this.id);
 }
 
 InnerSphere.prototype.onUpdate = function(time) {
@@ -58,11 +64,18 @@ InnerSphere.prototype.onUpdate = function(time) {
     averageFrequency = averageFrequency / len;
 
     this.offset.setUniform('u_innerSphereAmplitude', averageFrequency);
-    
+
     var offset = time / 2000;
     this.node
         .setRotation(offset, offset, offset)
         .requestUpdateOnNextTick(this.id);
-}
+
+    // gui update
+    this.node
+        .setAbsoluteSize(this.size, this.size, this.size)
+        .setOpacity(this.opacity);
+
+    this.mesh.setBaseColor(new Color(this.color));
+};
 
 module.exports = InnerSphere;

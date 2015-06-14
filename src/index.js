@@ -1,3 +1,5 @@
+'use strict';
+
 var FamousEngine = require('famous/core/FamousEngine');
 var Color = require('famous/utilities/Color');
 
@@ -14,18 +16,18 @@ var scene = FamousEngine.createScene('body');
 var audioContext = createAudioContext();
 var analyzer = createAnalyzer(audioContext);
 
-window.analyzer = analyzer;
-
 var frequencyData = new Float32Array(256);
 
 playMusic(audioContext, analyzer);
 
-new OuterSphere(scene.addChild(), analyzer, frequencyData);
-new MiddleSphere(scene.addChild(), analyzer, frequencyData);
-new InnerSphere(scene.addChild(), analyzer, frequencyData);
-new OuterSpikes(scene.addChild(), analyzer, frequencyData);
+var innerSphere = new InnerSphere(scene.addChild(), analyzer, frequencyData);
+var triangles = new MiddleSphere(scene.addChild(), analyzer, frequencyData);
+var debris = new OuterSphere(scene.addChild(), analyzer, frequencyData);
+var spikes = new OuterSpikes(scene.addChild(), analyzer, frequencyData);
 
 addLights(4);
+
+addGUI();
 
 function addLights(numLights) {
     var colors = [];
@@ -46,6 +48,30 @@ function addLights(numLights) {
             color.setRGB(r, g, b, { duration: 2500 });
         });
     }, 5000);
+}
+
+function addGUI() {
+    var gui = new dat.GUI();
+
+    var sphereFolder = gui.addFolder('Sphere');
+    sphereFolder.add(innerSphere, 'size', 10, 100);
+    sphereFolder.add(innerSphere, 'opacity', 0, 1);
+    sphereFolder.addColor(innerSphere, 'color');
+
+    var trianglesFolder = gui.addFolder('Triangles');
+    trianglesFolder.add(triangles, 'size', 10, 150);
+    trianglesFolder.add(triangles, 'opacity', 0, 1);
+    trianglesFolder.addColor(triangles, 'color');
+
+    var debrisFolder = gui.addFolder('Shards');
+    debrisFolder.add(debris, 'size', 10, 150);
+    debrisFolder.add(debris, 'opacity', 0 , 1);
+    debrisFolder.addColor(debris, 'color');
+
+    var spikesFolder = gui.addFolder('Rays');
+    spikesFolder.add(spikes, 'size', 10, 150);
+    spikesFolder.add(spikes, 'opacity', 0, 1);
+    spikesFolder.addColor(spikes, 'color');
 }
 
 function createAudioContext() {
@@ -78,7 +104,8 @@ function playMusic(audioContext, analyzer) {
         source.connect(analyzer);
         if (source.noteOn) {
             source.noteOn(0);
-        } else {
+        }
+        else {
             source.start();
         }
     }

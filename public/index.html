@@ -7,6 +7,7 @@
         <link rel="icon" href="favicon.ico?v=1" type="image/x-icon">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="./datGUI/dat.gui.min.js"></script>
         <style>
             html, body {
                 width: 100%;
@@ -24,6 +25,10 @@
                 perspective: none;
                 overflow: hidden;
                 background: black;
+                z-index: 0;
+            }
+            .dg.ac {
+                z-index: 999;
             }
         </style>
     </head>
