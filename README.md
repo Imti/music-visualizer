@@ -1,6 +1,6 @@
 #Demo
 
-[See the demo](https://api-te.famo.us/codemanager/v1/containers/69e12313-38f3-4392-ab07-117d36369462/share)
+[See the demo](http://music-visualizer.surge.sh/)
 
 ---
 
